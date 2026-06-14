@@ -1,1 +1,130 @@
+name: Update Portfolio with AI
 
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  update-portfolio:
+    # Only run if the issue has the label "update" OR starts with "update:" in title
+    if: |
+      contains(github.event.issue.labels.*.name, 'update') ||
+      startsWith(github.event.issue.title, 'update:')
+    
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Update portfolio via Groq
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: |
+          python3 << 'EOF'
+          import requests
+          import os
+          import json
+
+          # Read current index.html
+          with open("index.html", "r") as f:
+              current_html = f.read()
+
+          issue_title = os.environ.get("ISSUE_TITLE", "")
+          issue_body = os.environ.get("ISSUE_BODY", "") or ""
+          user_request = f"{issue_title}\n{issue_body}".strip()
+
+          prompt = f"""You are an assistant that edits a personal portfolio website (index.html).
+          
+The user wants this change:
+\"\"\"{user_request}\"\"\"
+
+Here is the current index.html:
+\"\"\"{current_html}\"\"\"
+
+Instructions:
+- Make ONLY the requested change. Do not alter anything else.
+- Return the COMPLETE updated index.html file, nothing else.
+- Do not wrap in markdown code blocks. Return raw HTML only.
+- Preserve all existing styles, scripts, and structure exactly.
+"""
+
+          response = requests.post(
+              "https://api.groq.com/openai/v1/chat/completions",
+              headers={
+                  "Authorization": f"Bearer {os.environ['GROQ_API_KEY']}",
+                  "Content-Type": "application/json"
+              },
+              json={
+                  "model": "llama-3.3-70b-versatile",
+                  "messages": [{"role": "user", "content": prompt}],
+                  "temperature": 0.1,
+                  "max_tokens": 16000
+              }
+          )
+
+          response.raise_for_status()
+          updated_html = response.json()["choices"][0]["message"]["content"].strip()
+
+          # Safety check — must look like HTML
+          if not updated_html.startswith("<!DOCTYPE") and not updated_html.startswith("<html"):
+              print("ERROR: Response doesn't look like HTML. Aborting.")
+              print(updated_html[:500])
+              exit(1)
+
+          with open("index.html", "w") as f:
+              f.write(updated_html)
+
+          print("index.html updated successfully.")
+          EOF
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "portfolio-bot"
+          git config user.email "portfolio-bot@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && echo "No changes to commit" && exit 0
+          git commit -m "AI update: ${{ github.event.issue.title }}"
+          git push
+
+      - name: Comment on issue with success
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `✅ **Portfolio updated!**\n\nYour change has been applied and deployed. It will be live at https://${context.repo.owner}.github.io in ~30 seconds.`
+            })
+            github.rest.issues.update({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'closed'
+            })
+
+      - name: Comment on issue with failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `❌ **Update failed.** Please check the [Actions log](https://github.com/${context.repo.owner}/${context.repo.repo}/actions) for details.`
+            })
