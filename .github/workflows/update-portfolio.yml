@@ -47,20 +47,16 @@ jobs:
           issue_body = os.environ.get("ISSUE_BODY", "") or ""
           user_request = f"{issue_title}\n{issue_body}".strip()
 
-          prompt = f"""You are an assistant that edits a personal portfolio website (index.html).
-          
-The user wants this change:
-\"\"\"{user_request}\"\"\"
-
-Here is the current index.html:
-\"\"\"{current_html}\"\"\"
-
-Instructions:
-- Make ONLY the requested change. Do not alter anything else.
-- Return the COMPLETE updated index.html file, nothing else.
-- Do not wrap in markdown code blocks. Return raw HTML only.
-- Preserve all existing styles, scripts, and structure exactly.
-"""
+          prompt = (
+              "You are an assistant that edits a personal portfolio website (index.html).\n\n"
+              "The user wants this change:\n" + user_request + "\n\n"
+              "Here is the current index.html:\n" + current_html + "\n\n"
+              "Instructions:\n"
+              "- Make ONLY the requested change. Do not alter anything else.\n"
+              "- Return the COMPLETE updated index.html file, nothing else.\n"
+              "- Do not wrap in markdown code blocks. Return raw HTML only.\n"
+              "- Preserve all existing styles, scripts, and structure exactly.\n"
+          )
 
           response = requests.post(
               "https://api.groq.com/openai/v1/chat/completions",
