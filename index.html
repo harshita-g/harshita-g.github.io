@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Harshita Gupta — AI Engineer</title>
-  <meta name="description" content="Portfolio of Your Name — AI/ML Engineer building intelligent systems." />
+  <meta name="description" content="Portfolio of Harshita Gupta — AI/ML Engineer building intelligent systems." />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -225,7 +225,35 @@
     .skill-pill:hover { border-color: var(--border-hover); }
     .skill-pill img { width: 16px; height: 16px; object-fit: contain; }
 
+    /* EDUCATION */
+    .exp-item {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 1rem;
+      padding: 1.1rem 0;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .exp-item:last-child { border-bottom: none; }
+    .exp-date { font-size: 12px; color: var(--text-secondary); padding-top: 2px; }
+    .exp-role { font-size: 14px; font-weight: 500; margin-bottom: 2px; }
+    .exp-place { font-size: 13px; color: var(--text-secondary); margin-bottom: 5px; }
+    .exp-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.65; }
+
     /* EXPERIENCE */
+    .exp-item {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 1rem;
+      padding: 1.1rem 0;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .exp-item:last-child { border-bottom: none; }
+    .exp-date { font-size: 12px; color: var(--text-secondary); padding-top: 2px; }
+    .exp-role { font-size: 14px; font-weight: 500; margin-bottom: 2px; }
+    .exp-place { font-size: 13px; color: var(--text-secondary); margin-bottom: 5px; }
+    .exp-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.65; }
+
+    /* ACHIEVEMENTS */
     .exp-item {
       display: grid;
       grid-template-columns: 110px 1fr;
@@ -283,12 +311,13 @@
   <div class="wrap">
 
     <nav>
-      <a href="#" class="logo">yourhandle</a>
+      <a href="#" class="logo"></a>
       <div class="nav-links">
         <a href="#about">About</a>
-        <a href="#projects">Projects</a>
-        <a href="#skills">Skills</a>
+        <a href="#about">Education</a>
         <a href="#experience">Experience</a>
+        <a href="#skills">Skills</a>
+        <a href="#projects">Projects</a>
         <a href="#achievements">Achievments</a>
         <a href="#contact">Contact</a>
       </div>
@@ -301,7 +330,7 @@
     <div class="hero">
       <div class="hero-text">
         <h1>Harshita Gupta</h1>
-        <div class="hero-role">AI Engineer &middot; SF, California, USA</div>
+        <div class="hero-role">AI Engineer &middot; San Francisco, California, USA</div>
         <p class="hero-bio">I build intelligent systems that ship, from LLM pipelines and computer vision to production ML infrastructure. Focused on turning research into reliable products.</p>
         <div class="hero-links">
           <a href="#projects" class="btn btn-dark">View work <i class="ti ti-arrow-right"></i></a>
@@ -313,20 +342,32 @@
       <div class="avatar">YN</div>
     </div>
 
-    <!-- ABOUT -->
-    <section id="about">
-      <div class="section-label">About</div>
-      <p class="about-body">I'm [Your Name], an AI/ML engineer with 5+ years building end-to-end machine learning systems. I specialize in large language models, computer vision, and scalable MLOps. I believe the best AI isn't the most complex — it's the one that reliably delivers value in production.</p>
-      <p class="about-body">When I'm not training models or optimizing inference pipelines, I'm writing about practical ML engineering and contributing to open-source tooling.</p>
-      <div class="stats">
-        <div class="stat"><div class="n">20+</div><div class="l">Projects shipped</div></div>
-        <div class="stat"><div class="n">5+</div><div class="l">Years experience</div></div>
-        <div class="stat"><div class="n">50+</div><div class="l">Models trained</div></div>
-        <div class="stat"><div class="n">&#8734;</div><div class="l">Papers read</div></div>
+    <!-- EDUCATION -->
+<section id="education">
+      <div class="section-label">Education</div>
+      <h2>Where I've studied</h2>
+      <div>
+        <div class="exp-item">
+          <div class="exp-date">January 2024 - May 2025</div>
+          <div>
+            <div class="exp-role">New Jersey Institute of Technology</div>
+            <div class="exp-place">MS in Computer Science</div>
+            <div class="exp-desc">Machine Learning, Data Structures and Algorithms, Reinforcement Learning, Natural Language Processing, Data Mining, Big Data, Operating Systems, Cloud Computing</div>
+          </div>
+        </div>
+        <div class="exp-item">
+          <div class="exp-date">July 2019 — May 2023</div>
+          <div>
+            <div class="exp-role">Indraprastha Institute of Information Technology, Delhi</div>
+            <div class="exp-place">B.Tech in Computer Science with Artifical Intelligence (CSAI)</div>
+            <div class="exp-desc">Advanced Machine Learning, Artificial Intelligence, Algorithm Design/Analysis, Data Structures, Advanced Programming, Operating Systems, Computer Networks, Database Management Systems, Computer Security, Collaborative Filtering, Cloud Computing, Digital Image Processing</div>
+            <div class="tags" style="margin-top:8px"><span class="tag">Python</span><span class="tag">API</span><span class="tag">Shell</span></div>
+          </div>
+        </div>
       </div>
     </section>
 
-        <!-- EXPERIENCE -->
+    <!-- EXPERIENCE -->
     <section id="experience">
       <div class="section-label">Experience</div>
       <h2>Where I've worked</h2>
